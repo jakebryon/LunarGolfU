@@ -839,4 +839,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blackHole: {fileID: 69742551}
+  planet: {fileID: 1303248075}
   gravityFactor: 1
+  released: 0
+  placement: 1
+  Theta: 0
+  Phi: 0
