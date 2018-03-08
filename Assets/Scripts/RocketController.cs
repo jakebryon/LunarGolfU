@@ -22,7 +22,11 @@ public class RocketController : MonoBehaviour {
 			Quaternion temp = transform.rotation;
 			temp.eulerAngles = new Vector3(0,0,Phi);
 			transform.rotation = temp;
+
+			Rigidbody2D rocketrb = GetComponent<Rigidbody2D> ();
+			rocketrb.velocity = Vector2.zero;
 				
+			// assigning key strokes
 			if (Input.GetKey (KeyCode.LeftArrow)) {
 				Theta += .1f;
 			}
@@ -35,14 +39,22 @@ public class RocketController : MonoBehaviour {
 			if (Input.GetKey (KeyCode.DownArrow)) {
 				Phi += -1f;
 			}
+			if (Input.GetKey (KeyCode.Space)) {
+				Vector2 boost = new Vector2 ((float)-1f*Mathf.Sin(Phi), (float)Mathf.Cos(Phi))*10;
+				// rocketrb.AddForce (boost);
+				rocketrb.velocity = boost;
+				placement = false;
+				released = true;
+			}
+
 		}
 
 		if (released) {
 			Rigidbody2D rocketrb = GetComponent<Rigidbody2D> ();
 			Rigidbody2D blackHolerb = blackHole.GetComponent<Rigidbody2D> ();
 			rocketrb.AddForce ((blackHole.transform.position - transform.position).normalized
-			* blackHolerb.mass * gravityFactor /
-			(blackHole.transform.position - transform.position).sqrMagnitude);
+				* blackHolerb.mass * gravityFactor /
+				(blackHole.transform.position - transform.position).sqrMagnitude);
 		}
 	}
 }
