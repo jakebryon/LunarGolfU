@@ -40,9 +40,10 @@ public class RocketController : MonoBehaviour {
 				Phi += -1f;
 			}
 			if (Input.GetKey (KeyCode.Space)) {
-				Vector2 boost = new Vector2 ((float)-1f*Mathf.Sin(Phi), (float)Mathf.Cos(Phi))*10;
-				// rocketrb.AddForce (boost);
-				rocketrb.velocity = boost;
+				Phi = (Phi * 3.14f) / 180f;
+				Vector3 boost = new Vector3 ((float)-1f*Mathf.Sin(Phi), (float)1f*Mathf.Cos(Phi), 0)*100;
+				rocketrb.AddForce (boost);
+				// rocketrb.velocity = boost;
 				placement = false;
 				released = true;
 			}
