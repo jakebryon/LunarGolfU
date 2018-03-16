@@ -5,11 +5,13 @@ using UnityEngine;
 public class RocketController : MonoBehaviour {
 	public GameObject blackHole;
 	public GameObject planet;
+	public GameObject moon;
 	public float gravityFactor = 1f;
 	public bool released = false;
 	public bool placement = true;
 	public float Theta = 0f;
 	public float Phi = 0f;
+	public float power = 1f;
 
 	void FixedUpdate () {
 		if (placement) {
@@ -39,9 +41,14 @@ public class RocketController : MonoBehaviour {
 			if (Input.GetKey (KeyCode.DownArrow)) {
 				Phi += -1f;
 			}
+			if (Input.GetKey (KeyCode.Z)) {
+				power += .5f;
+				if (power == 10f) {
+					power = 1f;
+				}
+			}
 			if (Input.GetKey (KeyCode.Space)) {
-				Phi = (Phi * 3.14f) / 180f;
-				Vector3 boost = new Vector3 ((float)-1f*Mathf.Sin(Phi), (float)1f*Mathf.Cos(Phi), 0)*100;
+				Vector3 boost = new Vector3 ((float)-1f*Mathf.Sin((Phi * 3.1415f) / 180f), (float)1f*Mathf.Cos((Phi * 3.1415f) / 180f), 0)*100*power;
 				rocketrb.AddForce (boost);
 				// rocketrb.velocity = boost;
 				placement = false;
@@ -51,11 +58,19 @@ public class RocketController : MonoBehaviour {
 		}
 
 		if (released) {
+			if (Input.GetKey (KeyCode.X)) {
+				placement = true;
+				released = false;
+			}
 			Rigidbody2D rocketrb = GetComponent<Rigidbody2D> ();
 			Rigidbody2D blackHolerb = blackHole.GetComponent<Rigidbody2D> ();
+			Rigidbody2D moonrb = moon.GetComponent<Rigidbody2D> ();
 			rocketrb.AddForce ((blackHole.transform.position - transform.position).normalized
 				* blackHolerb.mass * gravityFactor /
 				(blackHole.transform.position - transform.position).sqrMagnitude);
+			rocketrb.AddForce ((moon.transform.position - transform.position).normalized
+				* moonrb.mass * gravityFactor /
+				(moon.transform.position - transform.position).sqrMagnitude);
 		}
 	}
 }
